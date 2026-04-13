@@ -17,6 +17,8 @@ interface LogStore {
   setCurrentTime: (ts: number) => void;
   setIsPlaying: (playing: boolean) => void;
   setSpeed: (speed: number) => void;
+  goToNextEvent: () => void;
+  goToPrevEvent: () => void;
   reset: () => void;
 }
 
@@ -50,6 +52,26 @@ export const useLogStore = create<LogStore>((set) => ({
 
   setIsPlaying: (playing: boolean) => set({ isPlaying: playing }),
   setSpeed: (speed: number) => set({ speed }),
+
+  goToNextEvent: () => {
+    set((state) => {
+      const nextEvent = state.events.find(e => e.ts > state.currentTime);
+      if (nextEvent) {
+        return { currentTime: nextEvent.ts };
+      }
+      return { currentTime: state.maxTime };
+    });
+  },
+
+  goToPrevEvent: () => {
+    set((state) => {
+      const prevEvent = state.events.slice().reverse().find(e => e.ts < state.currentTime);
+      if (prevEvent) {
+        return { currentTime: prevEvent.ts };
+      }
+      return { currentTime: 0 };
+    });
+  },
 
   reset: () => {
     set({

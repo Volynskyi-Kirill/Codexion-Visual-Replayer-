@@ -1,4 +1,4 @@
-import { Play, Pause, RotateCcw } from 'lucide-react';
+import { Play, Pause, RotateCcw, SkipBack, SkipForward } from 'lucide-react';
 import { useLogStore } from '../store/useLogStore';
 import { usePlayback } from '../hooks/usePlayback';
 
@@ -11,6 +11,8 @@ export const PlaybackControls: React.FC = () => {
     setIsPlaying, 
     speed, 
     setSpeed,
+    goToNextEvent,
+    goToPrevEvent,
   } = useLogStore();
 
   usePlayback();
@@ -49,8 +51,14 @@ export const PlaybackControls: React.FC = () => {
         <button onClick={() => setCurrentTime(0)} title="Restart">
           <RotateCcw size={20} />
         </button>
+        <button onClick={goToPrevEvent} title="Previous Event">
+          <SkipBack size={20} />
+        </button>
         <button onClick={togglePlay} className="play-pause-btn" title={isPlaying ? 'Pause' : 'Play'}>
           {isPlaying ? <Pause size={24} /> : <Play size={24} />}
+        </button>
+        <button onClick={goToNextEvent} title="Next Event">
+          <SkipForward size={20} />
         </button>
         <div className="speed-selector">
           {speeds.map((s) => (
