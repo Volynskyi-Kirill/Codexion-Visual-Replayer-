@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -26,6 +27,10 @@ func (api *API) HandleWS(c *gin.Context) {
 		return
 	}
 	defer conn.Close()
+
+	// Set read/write deadlines
+	conn.SetReadDeadline(time.Now().Add(api.cfg.Server.WebSocketTimeout))
+	conn.SetWriteDeadline(time.Now().Add(api.cfg.Server.WebSocketTimeout))
 
 	// 1. Read configuration from WS
 	_, message, err := conn.ReadMessage()
@@ -58,6 +63,8 @@ func (api *API) HandleWS(c *gin.Context) {
 	scanner := bufio.NewScanner(stdout)
 	for scanner.Scan() {
 		line := scanner.Text()
+		// Update write deadline for each write
+		conn.SetWriteDeadline(time.Now().Add(api.cfg.Server.WebSocketTimeout))
 		if err := conn.WriteMessage(websocket.TextMessage, []byte(line)); err != nil {
 			log.Printf("Failed to send message: %v", err)
 			break
