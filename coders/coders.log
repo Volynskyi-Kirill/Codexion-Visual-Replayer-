@@ -1,0 +1,42 @@
+{"status": "INITIALIZE", "num_coders": 5, "num_dongles": 5, "time_to_burnout": 5000, "time_to_compile": 1000, "time_to_debug": 1000, "time_to_refactor": 1000, "num_compiles_required": 5, "dongle_cooldown": 500, "scheduler": "EDF"}
+{"ts": 0, "status": "REQUEST_DONGLE", "coder_id": 1, "dongle_id": 1, "queue": [1], "priorities": [5000]}
+{"ts": 1, "status": "TAKE_DONGLE", "coder_id": 1, "dongle_id": 1, "queue": [], "priorities": []}
+{"ts": 1, "status": "REQUEST_DONGLE", "coder_id": 3, "dongle_id": 2, "queue": [3], "priorities": [5000]}
+{"ts": 1, "status": "REQUEST_DONGLE", "coder_id": 1, "dongle_id": 5, "queue": [1], "priorities": [5000]}
+{"ts": 1, "status": "REQUEST_DONGLE", "coder_id": 2, "dongle_id": 1, "queue": [2], "priorities": [5000]}
+{"ts": 1, "status": "REQUEST_DONGLE", "coder_id": 4, "dongle_id": 3, "queue": [4], "priorities": [5000]}
+{"ts": 1, "status": "REQUEST_DONGLE", "coder_id": 5, "dongle_id": 4, "queue": [5], "priorities": [5000]}
+{"ts": 1, "status": "TAKE_DONGLE", "coder_id": 5, "dongle_id": 4, "queue": [], "priorities": []}
+{"ts": 1, "status": "TAKE_DONGLE", "coder_id": 4, "dongle_id": 3, "queue": [], "priorities": []}
+{"ts": 1, "status": "REQUEST_DONGLE", "coder_id": 4, "dongle_id": 4, "queue": [4], "priorities": [5000]}
+{"ts": 1, "status": "TAKE_DONGLE", "coder_id": 3, "dongle_id": 2, "queue": [], "priorities": []}
+{"ts": 1, "status": "REQUEST_DONGLE", "coder_id": 3, "dongle_id": 3, "queue": [3], "priorities": [5000]}
+{"ts": 1, "status": "TAKE_DONGLE", "coder_id": 1, "dongle_id": 5, "queue": [], "priorities": []}
+{"ts": 1, "status": "START_COMPILE", "coder_id": 1, "details": {"compiles_done": 0, "deadline": 5001}}
+{"ts": 1, "status": "REQUEST_DONGLE", "coder_id": 5, "dongle_id": 5, "queue": [5], "priorities": [5000]}
+{"ts": 1001, "status": "RELEASE_DONGLE", "coder_id": 1, "dongle_id": 1, "queue": [2], "priorities": [5000]}
+{"ts": 1001, "status": "RELEASE_DONGLE", "coder_id": 1, "dongle_id": 5, "queue": [5], "priorities": [5000]}
+{"ts": 1001, "status": "START_DEBUG", "coder_id": 1, "details": {"compiles_done": 1, "deadline": 5001}}
+{"ts": 1502, "status": "TAKE_DONGLE", "coder_id": 2, "dongle_id": 1, "queue": [], "priorities": []}
+{"ts": 1502, "status": "REQUEST_DONGLE", "coder_id": 2, "dongle_id": 2, "queue": [2], "priorities": [5000]}
+{"ts": 1502, "status": "TAKE_DONGLE", "coder_id": 5, "dongle_id": 5, "queue": [], "priorities": []}
+{"ts": 1502, "status": "START_COMPILE", "coder_id": 5, "details": {"compiles_done": 0, "deadline": 6502}}
+{"ts": 2001, "status": "START_REFACTOR", "coder_id": 1, "details": {"compiles_done": 1, "deadline": 5001}}
+{"ts": 2502, "status": "RELEASE_DONGLE", "coder_id": 5, "dongle_id": 4, "queue": [4], "priorities": [5000]}
+{"ts": 2502, "status": "RELEASE_DONGLE", "coder_id": 5, "dongle_id": 5, "queue": [], "priorities": []}
+{"ts": 2502, "status": "START_DEBUG", "coder_id": 5, "details": {"compiles_done": 1, "deadline": 6502}}
+{"ts": 3001, "status": "REQUEST_DONGLE", "coder_id": 1, "dongle_id": 1, "queue": [1], "priorities": [5001]}
+{"ts": 3003, "status": "TAKE_DONGLE", "coder_id": 4, "dongle_id": 4, "queue": [], "priorities": []}
+{"ts": 3003, "status": "START_COMPILE", "coder_id": 4, "details": {"compiles_done": 0, "deadline": 8003}}
+{"ts": 3502, "status": "START_REFACTOR", "coder_id": 5, "details": {"compiles_done": 1, "deadline": 6502}}
+{"ts": 4003, "status": "RELEASE_DONGLE", "coder_id": 4, "dongle_id": 3, "queue": [3], "priorities": [5000]}
+{"ts": 4003, "status": "RELEASE_DONGLE", "coder_id": 4, "dongle_id": 4, "queue": [], "priorities": []}
+{"ts": 4003, "status": "START_DEBUG", "coder_id": 4, "details": {"compiles_done": 1, "deadline": 8003}}
+{"ts": 4502, "status": "REQUEST_DONGLE", "coder_id": 5, "dongle_id": 4, "queue": [5], "priorities": [6502]}
+{"ts": 4504, "status": "TAKE_DONGLE", "coder_id": 3, "dongle_id": 3, "queue": [], "priorities": []}
+{"ts": 4504, "status": "START_COMPILE", "coder_id": 3, "details": {"compiles_done": 0, "deadline": 9504}}
+{"ts": 4504, "status": "TAKE_DONGLE", "coder_id": 5, "dongle_id": 4, "queue": [], "priorities": []}
+{"ts": 4504, "status": "REQUEST_DONGLE", "coder_id": 5, "dongle_id": 5, "queue": [5], "priorities": [6502]}
+{"ts": 4504, "status": "TAKE_DONGLE", "coder_id": 5, "dongle_id": 5, "queue": [], "priorities": []}
+{"ts": 4504, "status": "START_COMPILE", "coder_id": 5, "details": {"compiles_done": 1, "deadline": 9504}}
+{"ts": 5000, "status": "BURNOUT", "coder_id": 2}
