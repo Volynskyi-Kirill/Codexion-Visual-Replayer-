@@ -66,7 +66,7 @@ header h1 {
     align-items: center;
     justify-content: center;
     padding: 2rem;
-    max-width: 800px;
+    max-width: 980px;
     margin: 0 auto;
 }
 
@@ -79,7 +79,7 @@ header h1 {
 .simulation-form {
     width: 100%;
     background: #1e293b;
-    padding: 2rem;
+    padding: 1.5rem;
     border-radius: 1rem;
     border: 1px solid #334155;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
@@ -87,10 +87,24 @@ header h1 {
 
 .form-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem 1.5rem;
     margin-bottom: 2rem;
     text-align: left;
+}
+
+@media (max-width: 700px) {
+    .setup-section {
+        padding: 1rem;
+    }
+
+    .simulation-form {
+        padding: 1.25rem;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .form-group {
