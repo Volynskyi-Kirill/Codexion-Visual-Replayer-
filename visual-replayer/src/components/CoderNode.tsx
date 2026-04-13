@@ -62,10 +62,10 @@ export const CoderNode: React.FC<CoderNodeProps> = ({
     const angle = getCoderAngle(coder.id, totalCoders);
     const { x, y } = polarToCartesian(angle, CODER_RADIUS);
 
-    const timeLeft =
-        coder.deadline > 0
-            ? Math.max(0, coder.deadline - currentTime)
-            : timeToBurnout;
+    const timeLeft = Math.max(
+        0,
+        timeToBurnout - (currentTime - coder.last_state_change_ts),
+    );
     const progress = timeLeft / timeToBurnout;
     const strokeDasharray = 2 * Math.PI * (NODE_SIZE / 2 + 5);
     const strokeDashoffset = strokeDasharray * (1 - progress);
@@ -129,6 +129,28 @@ export const CoderNode: React.FC<CoderNodeProps> = ({
                     <StatusIcon status={coder.status} size={32} />
                 </div>
             </foreignObject>
+
+            {/* Burnout Timer */}
+            <motion.text
+                y={-NODE_SIZE / 2 - 15}
+                textAnchor='middle'
+                fill={
+                    coder.last_state_change_ts > 0
+                        ? COLORS.BURNOUT
+                        : COLORS.WAITING
+                }
+                fontSize='11'
+                fontWeight='bold'
+                animate={{
+                    fill:
+                        coder.last_state_change_ts > 0
+                            ? COLORS.BURNOUT
+                            : COLORS.WAITING,
+                }}
+                transition={stateTransition}
+            >
+                {Math.ceil(timeLeft / 1000)}s
+            </motion.text>
 
             {/* ID Label */}
             <text

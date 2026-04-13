@@ -97,6 +97,7 @@ export interface CoderState {
     current_dongle_id: number | null;
     current_dongle_ids: number[];
     compiles_done: number;
+    last_state_change_ts: number;
 }
 
 export interface DongleState {

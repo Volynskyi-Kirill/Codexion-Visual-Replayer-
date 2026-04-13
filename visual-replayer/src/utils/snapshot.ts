@@ -28,6 +28,7 @@ export function generateSnapshot(
             current_dongle_id: null,
             current_dongle_ids: [],
             compiles_done: 0,
+            last_state_change_ts: 0,
         });
     }
 
@@ -86,6 +87,7 @@ export function generateSnapshot(
                               : CoderStatus.REFACTORING;
                     coder.deadline = event.details.deadline;
                     coder.compiles_done = event.details.compiles_done;
+                    coder.last_state_change_ts = event.ts;
                 }
                 break;
             }
