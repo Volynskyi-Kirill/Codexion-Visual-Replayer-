@@ -1,4 +1,4 @@
-import { Play, Pause, FastForward, Rewind, RotateCcw } from 'lucide-react';
+import { Play, Pause, RotateCcw } from 'lucide-react';
 import { useLogStore } from '../store/useLogStore';
 import { usePlayback } from '../hooks/usePlayback';
 
@@ -11,7 +11,6 @@ export const PlaybackControls: React.FC = () => {
     setIsPlaying, 
     speed, 
     setSpeed,
-    reset
   } = useLogStore();
 
   usePlayback();

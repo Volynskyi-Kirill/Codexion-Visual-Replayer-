@@ -35,22 +35,21 @@ export const useLogStore = create<LogStore>((set) => ({
     try {
       const { metadata, events, maxTime } = parseLogs(content);
       set({ metadata, events, maxTime, currentTime: 0, isLoading: false, isPlaying: false });
-    } catch (e: any) {
-      set({ error: e.message || 'Failed to parse logs', isLoading: false });
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : ERROR_MESSAGES.PARSING_FAILED;
+      set({ error: message, isLoading: false });
     }
   },
 
   setCurrentTime: (ts: number) => {
     set((state) => ({
       currentTime: Math.max(0, Math.min(ts, state.maxTime)),
-      // Auto-pause if reached end
       isPlaying: ts >= state.maxTime ? false : state.isPlaying,
     }));
   },
 
   setIsPlaying: (playing: boolean) => set({ isPlaying: playing }),
   setSpeed: (speed: number) => set({ speed }),
-...
 
   reset: () => {
     set({
@@ -60,6 +59,8 @@ export const useLogStore = create<LogStore>((set) => ({
       maxTime: 0,
       isLoading: false,
       error: null,
+      isPlaying: false,
+      speed: 1,
     });
   },
 }));

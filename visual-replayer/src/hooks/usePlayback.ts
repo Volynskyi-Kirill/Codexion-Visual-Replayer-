@@ -3,8 +3,8 @@ import { useLogStore } from '../store/useLogStore';
 
 export function usePlayback() {
   const { isPlaying, speed, currentTime, setCurrentTime, maxTime } = useLogStore();
-  const requestRef = useRef<number>(null);
-  const lastTimeRef = useRef<number>(null);
+  const requestRef = useRef<number>(undefined);
+  const lastTimeRef = useRef<number>(undefined);
 
   useEffect(() => {
     const animate = (time: number) => {
@@ -25,12 +25,17 @@ export function usePlayback() {
     if (isPlaying) {
       requestRef.current = requestAnimationFrame(animate);
     } else {
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      if (requestRef.current !== undefined) {
+        cancelAnimationFrame(requestRef.current);
+        requestRef.current = undefined;
+      }
       lastTimeRef.current = undefined;
     }
 
     return () => {
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      if (requestRef.current !== undefined) {
+        cancelAnimationFrame(requestRef.current);
+      }
     };
   }, [isPlaying, speed, currentTime, maxTime, setCurrentTime]);
 }
