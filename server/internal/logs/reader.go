@@ -273,7 +273,8 @@ func (r *Reader) GetIPStatistics(ip string, days int) (map[string]interface{}, e
 // Helper functions
 
 func (r *Reader) readConnectionLogs(sinceTime time.Time) ([]ConnectionLog, error) {
-	return r.readJSONLFile(filepath.Join(r.logsDir, "connections.jsonl"), func(data []byte) (interface{}, error) {
+	results := []ConnectionLog{}
+	rawResults := r.readJSONLFile(filepath.Join(r.logsDir, "connections.jsonl"), func(data []byte) (interface{}, error) {
 		var log ConnectionLog
 		err := json.Unmarshal(data, &log)
 		if err != nil {
@@ -283,11 +284,21 @@ func (r *Reader) readConnectionLogs(sinceTime time.Time) ([]ConnectionLog, error
 			return log, nil
 		}
 		return nil, nil
-	}).([]ConnectionLog), nil
+	})
+
+	if rawResults != nil {
+		for _, item := range rawResults.([]interface{}) {
+			if connLog, ok := item.(ConnectionLog); ok {
+				results = append(results, connLog)
+			}
+		}
+	}
+	return results, nil
 }
 
 func (r *Reader) readErrorLogs(sinceTime time.Time) ([]ErrorLog, error) {
-	return r.readJSONLFile(filepath.Join(r.logsDir, "errors.jsonl"), func(data []byte) (interface{}, error) {
+	results := []ErrorLog{}
+	rawResults := r.readJSONLFile(filepath.Join(r.logsDir, "errors.jsonl"), func(data []byte) (interface{}, error) {
 		var log ErrorLog
 		err := json.Unmarshal(data, &log)
 		if err != nil {
@@ -297,7 +308,16 @@ func (r *Reader) readErrorLogs(sinceTime time.Time) ([]ErrorLog, error) {
 			return log, nil
 		}
 		return nil, nil
-	}).([]ErrorLog), nil
+	})
+
+	if rawResults != nil {
+		for _, item := range rawResults.([]interface{}) {
+			if errLog, ok := item.(ErrorLog); ok {
+				results = append(results, errLog)
+			}
+		}
+	}
+	return results, nil
 }
 
 func (r *Reader) readJSONLFile(filePath string, parser func([]byte) (interface{}, error)) interface{} {
@@ -307,12 +327,12 @@ func (r *Reader) readJSONLFile(filePath string, parser func([]byte) (interface{}
 	}
 	defer file.Close()
 
-	var results interface{}
+	results := []interface{}{}
 	scanner := bufio.NewScanner(file)
 
 	for scanner.Scan() {
 		if item, err := parser(scanner.Bytes()); err == nil && item != nil {
-			results = append(results.([]interface{}), item)
+			results = append(results, item)
 		}
 	}
 

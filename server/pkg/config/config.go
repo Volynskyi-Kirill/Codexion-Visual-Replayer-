@@ -29,7 +29,7 @@ func Load() *Config {
 			Port:             getEnv("PORT", "3000"),
 			ClientHost:       getEnv("CLIENT_HOST", "http://localhost:5173"),
 			CodexionPath:     getEnv("CODEXION_PATH", "./codexion"),
-			AdminToken:       getEnv("ADMIN_TOKEN", ""),
+			AdminToken:       getEnv("ADMIN_TOKEN", "admin"),
 			WebSocketTimeout: wsTimeout,
 		},
 	}
