@@ -1,37 +1,45 @@
 services:
-  backend:
-    build:
-      context: .
-      dockerfile: server/Dockerfile
-    ports:
-      - "${PORT:-3000}:${PORT:-3000}"
-    env_file:
-      - .env
-    environment:
-      - PORT=${PORT:-3000}
-      - CLIENT_HOST=${CLIENT_HOST:-http://localhost}
-      - CODEXION_PATH=${CODEXION_PATH:-./codexion}
-      - LOGS_DIR=${LOGS_DIR:-./logs}
-      - ADMIN_TOKEN=${ADMIN_TOKEN}
-    volumes:
-      - ./server/logs:/app/logs
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:${PORT:-3000}/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 5s
+    backend:
+        build:
+            context: .
+            dockerfile: server/Dockerfile
+        ports:
+            - '${BIND_HOST:-127.0.0.1}:${PORT:-3000}:${PORT:-3000}'
+        env_file:
+            - .env
+        environment:
+            - PORT=${PORT:-3000}
+            - CLIENT_HOST=${CLIENT_HOST:-http://localhost}
+            - CODEXION_PATH=${CODEXION_PATH:-./codexion}
+            - LOGS_DIR=${LOGS_DIR:-./logs}
+            - ADMIN_TOKEN=${ADMIN_TOKEN}
+        volumes:
+            - ./server/logs:/app/logs
+        restart: unless-stopped
+        healthcheck:
+            test:
+                [
+                    'CMD',
+                    'wget',
+                    '--no-verbose',
+                    '--tries=1',
+                    '--spider',
+                    'http://localhost:${PORT:-3000}/health',
+                ]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 5s
 
-  frontend:
-    build:
-      context: ./visual-replayer
-      dockerfile: Dockerfile
-    ports:
-      - "8080:80"
-    environment:
-      - BACKEND_PORT=${PORT:-3000}
-    restart: unless-stopped
-    depends_on:
-      backend:
-        condition: service_healthy
+    frontend:
+        build:
+            context: ./visual-replayer
+            dockerfile: Dockerfile
+        ports:
+            - '${BIND_HOST:-127.0.0.1}:${FRONTEND_PORT:-8080}:80'
+        environment:
+            - BACKEND_PORT=${PORT:-3000}
+        restart: unless-stopped
+        depends_on:
+            backend:
+                condition: service_healthy
