@@ -4,10 +4,19 @@ services:
       context: .
       dockerfile: server/Dockerfile
     ports:
-      - "3000:3000"
+      - "${PORT:-3000}:${PORT:-3000}"
+    env_file:
+      - .env
+    environment:
+      - PORT=${PORT:-3000}
+      - CLIENT_HOST=${CLIENT_HOST:-http://localhost}
+      - CODEXION_PATH=${CODEXION_PATH:-./codexion}
+      - LOGS_DIR=${LOGS_DIR:-./logs}
+    volumes:
+      - ./server/logs:/app/logs
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:${PORT:-3000}/health"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -19,6 +28,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:80"
+    environment:
+      - BACKEND_PORT=${PORT:-3000}
     restart: unless-stopped
     depends_on:
       backend:
