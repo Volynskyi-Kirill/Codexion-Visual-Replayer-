@@ -22,33 +22,148 @@ body {
     flex-direction: column;
 }
 
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #1e293b;
+    margin-bottom: 1rem;
+}
+
 header h1 {
     font-size: 1.25rem;
-    margin: 0 0 1rem 0;
+    margin: 0;
     color: #94a3b8;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     font-weight: 300;
 }
 
-.upload-section {
-    margin: auto;
-    padding: 4rem;
-    border: 2px dashed #334155;
-    border-radius: 1.5rem;
-    background: #1e293b55;
-    transition: border-color 0.2s;
-}
-
-.upload-btn {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    background: #3b82f6;
-    color: white;
+.back-btn {
+    padding: 0.5rem 1rem;
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
     border-radius: 0.5rem;
     cursor: pointer;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+}
+
+.back-btn:hover {
+    background: #334155;
+    color: #f8fafc;
+    border-color: #3b82f6;
+}
+
+.setup-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.setup-section h2 {
+    margin-bottom: 2rem;
+    color: #f8fafc;
+    font-weight: 400;
+}
+
+.simulation-form {
+    width: 100%;
+    background: #1e293b;
+    padding: 2rem;
+    border-radius: 1rem;
+    border: 1px solid #334155;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: left;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.form-group input,
+.form-group select {
+    background: #0f172a;
+    border: 1px solid #334155;
+    color: #f8fafc;
+    padding: 0.6rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #3b82f6;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 1rem;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
     font-weight: 600;
-    margin-bottom: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.submit-btn:hover:not(:disabled) {
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.submit-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.form-group input.input-error,
+.form-group select.input-error {
+    border-color: #ef4444;
+}
+
+.field-error {
+    color: #ef4444;
+    font-size: 0.7rem;
+    margin-top: 0.25rem;
+    text-align: left;
 }
 
 .replayer-content {

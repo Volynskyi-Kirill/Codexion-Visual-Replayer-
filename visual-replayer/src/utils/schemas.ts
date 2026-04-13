@@ -74,3 +74,15 @@ export const LogEventSchema = z.union([
 ]);
 
 export type ParsedLogEvent = z.infer<typeof LogEventSchema>;
+
+export const SimulationConfigSchema = z.object({
+    number_of_coders: z.number().min(1).max(20),
+    number_of_dongles: z.number().min(1).max(10),
+    time_to_burnout: z.number().min(100),
+    time_to_compile: z.number().min(100),
+    time_to_debug: z.number().min(100),
+    time_to_refactor: z.number().min(100),
+    number_of_compiles_required: z.number().min(1),
+    dongle_cooldown: z.number().min(0),
+    scheduler: z.enum(['fifo', 'edf']),
+});

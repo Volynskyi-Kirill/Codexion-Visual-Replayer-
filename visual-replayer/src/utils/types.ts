@@ -121,3 +121,15 @@ export interface SimulationSnapshot {
     isBurnedOut: boolean;
     isSuccess: boolean;
 }
+
+export interface SimulationConfig {
+    number_of_coders: number;
+    number_of_dongles: number;
+    time_to_burnout: number;
+    time_to_compile: number;
+    time_to_debug: number;
+    time_to_refactor: number;
+    number_of_compiles_required: number;
+    dongle_cooldown: number;
+    scheduler: 'fifo' | 'edf';
+}

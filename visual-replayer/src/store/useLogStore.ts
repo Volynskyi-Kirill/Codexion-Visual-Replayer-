@@ -1,7 +1,7 @@
 import { create } from 'zustand';
-import type { TimedEvent, InitializeEvent } from '../utils/types';
+import type { TimedEvent, InitializeEvent, SimulationConfig } from '../utils/types';
 import { parseLogs } from '../utils/parser';
-import { ERROR_MESSAGES } from '../constants';
+import { ERROR_MESSAGES, API_SIMULATION_PATH } from '../constants';
 
 interface LogStore {
   metadata: InitializeEvent | null;
@@ -15,6 +15,7 @@ interface LogStore {
   speed: number;
 
   setLogs: (content: string) => void;
+  fetchLogs: (config: SimulationConfig) => Promise<void>;
   setCurrentTime: (ts: number) => void;
   setIsPlaying: (playing: boolean) => void;
   setSpeed: (speed: number) => void;
@@ -23,7 +24,7 @@ interface LogStore {
   reset: () => void;
 }
 
-export const useLogStore = create<LogStore>((set) => ({
+export const useLogStore = create<LogStore>((set, get) => ({
   metadata: null,
   events: [],
   currentTime: 0,
@@ -49,6 +50,30 @@ export const useLogStore = create<LogStore>((set) => ({
       });
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : ERROR_MESSAGES.PARSING_FAILED;
+      set({ error: message, isLoading: false });
+    }
+  },
+
+  fetchLogs: async (config: SimulationConfig) => {
+    set({ isLoading: true, error: null });
+    try {
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+      const response = await fetch(`${baseUrl}${API_SIMULATION_PATH}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(config),
+      });
+
+      if (!response.ok) {
+        throw new Error(ERROR_MESSAGES.FETCH_FAILED);
+      }
+
+      const content = await response.text();
+      get().setLogs(content);
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : ERROR_MESSAGES.FETCH_FAILED;
       set({ error: message, isLoading: false });
     }
   },
