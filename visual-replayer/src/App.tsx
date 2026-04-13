@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useLogStore } from './store/useLogStore';
 import { CircularHub } from './components/CircularHub';
 import { PlaybackControls } from './components/PlaybackControls';
@@ -5,21 +6,33 @@ import { HeapViewer } from './components/HeapViewer';
 import { EventLog } from './components/EventLog';
 import { SimulationInfo } from './components/SimulationInfo';
 import { SimulationForm } from './components/SimulationForm';
+import { FAQ } from './components/FAQ';
+import { HelpCircle } from 'lucide-react';
 import './App.css';
 
 function App() {
     const { metadata, reset } = useLogStore();
+    const [isFAQOpen, setIsFAQOpen] = useState(false);
 
     return (
         <div className='app-container'>
             <header>
-                <h1>Codexion Visual Replayer</h1>
-                {metadata && (
-                    <button className='back-btn' onClick={reset}>
-                        New Simulation
+                <div className='header-left'>
+                    <h1>Codexion Visual Replayer</h1>
+                </div>
+                <div className='header-right'>
+                    <button className='icon-btn' onClick={() => setIsFAQOpen(true)} title='Help & FAQ'>
+                        <HelpCircle size={20} />
                     </button>
-                )}
+                    {metadata && (
+                        <button className='back-btn' onClick={reset}>
+                            New Simulation
+                        </button>
+                    )}
+                </div>
             </header>
+
+            {isFAQOpen && <FAQ onClose={() => setIsFAQOpen(false)} />}
 
             {!metadata ? (
                 <div className='setup-section'>

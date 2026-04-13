@@ -40,6 +40,147 @@ header h1 {
     font-weight: 300;
 }
 
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+}
+
+.icon-btn:hover {
+    background: #1e293b;
+    color: #3b82f6;
+}
+
+/* FAQ Modal */
+.faq-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.faq-modal {
+    background: #1e293b;
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    border-radius: 1rem;
+    border: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+}
+
+.faq-modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid #334155;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.title-with-icon h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #f8fafc;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 2rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.faq-scroll-area {
+    padding: 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+    text-align: left;
+}
+
+.faq-item {
+    margin-bottom: 2rem;
+}
+
+.faq-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.faq-icon-wrapper {
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    display: flex;
+}
+
+.faq-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #e2e8f0;
+    font-weight: 600;
+}
+
+.faq-content {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.faq-content p {
+    margin: 0 0 1rem 0;
+}
+
+.faq-content ul {
+    margin: 0 0 1rem 0;
+    padding-left: 1.25rem;
+}
+
+.faq-content li {
+    margin-bottom: 0.5rem;
+}
+
+.faq-footer {
+    padding: 1rem 1.5rem;
+    background: #0f172a;
+    border-top: 1px solid #334155;
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
 .back-btn {
     padding: 0.5rem 1rem;
     background: #1e293b;
