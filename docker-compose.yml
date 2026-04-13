@@ -12,6 +12,7 @@ services:
       - CLIENT_HOST=${CLIENT_HOST:-http://localhost}
       - CODEXION_PATH=${CODEXION_PATH:-./codexion}
       - LOGS_DIR=${LOGS_DIR:-./logs}
+      - ADMIN_TOKEN=${ADMIN_TOKEN}
     volumes:
       - ./server/logs:/app/logs
     restart: unless-stopped

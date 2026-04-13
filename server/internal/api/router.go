@@ -26,7 +26,7 @@ func NewRouter(cfg *config.Config, logger *logs.Logger, reader *logs.Reader) *gi
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowOrigins = []string{cfg.Server.ClientHost}
 	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "OPTIONS"}
-	corsConfig.AllowHeaders = []string{"Content-Type"}
+	corsConfig.AllowHeaders = []string{"Content-Type", "X-Admin-Token"}
 	r.Use(cors.New(corsConfig))
 
 	// Health check endpoint for Docker
@@ -37,11 +37,18 @@ func NewRouter(cfg *config.Config, logger *logs.Logger, reader *logs.Reader) *gi
 	// WebSocket endpoint
 	r.GET("/api/ws/simulate", api.HandleWS)
 
-	// Analytics endpoints
+	// Analytics endpoints (protected)
+	analytics := r.Group("/api/analytics")
+	analytics.Use(AdminAuthMiddleware(cfg.Server.AdminToken))
+	{
+		logHandler := NewLogHandler(reader)
+		analytics.GET("/weekly", logHandler.GetWeeklyStats)
+		analytics.GET("/daily", logHandler.GetDailyStats)
+		analytics.GET("/ip/:ip", logHandler.GetIPStats)
+	}
+
+	// Public health check for analytics reader
 	logHandler := NewLogHandler(reader)
-	r.GET("/api/analytics/weekly", logHandler.GetWeeklyStats)
-	r.GET("/api/analytics/daily", logHandler.GetDailyStats)
-	r.GET("/api/analytics/ip/:ip", logHandler.GetIPStats)
 	r.GET("/api/health", logHandler.HealthCheck)
 
 	return r

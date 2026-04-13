@@ -14,6 +14,7 @@ type ServerConfig struct {
 	Port             string
 	ClientHost       string
 	CodexionPath     string
+	AdminToken       string
 	WebSocketTimeout time.Duration
 }
 
@@ -28,6 +29,7 @@ func Load() *Config {
 			Port:             getEnv("PORT", "3000"),
 			ClientHost:       getEnv("CLIENT_HOST", "http://localhost:5173"),
 			CodexionPath:     getEnv("CODEXION_PATH", "./codexion"),
+			AdminToken:       getEnv("ADMIN_TOKEN", ""),
 			WebSocketTimeout: wsTimeout,
 		},
 	}
