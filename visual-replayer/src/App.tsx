@@ -1,6 +1,8 @@
 import { useLogStore } from './store/useLogStore';
 import { CircularHub } from './components/CircularHub';
 import { PlaybackControls } from './components/PlaybackControls';
+import { HeapViewer } from './components/HeapViewer';
+import { EventLog } from './components/EventLog';
 import './App.css';
 
 function App() {
@@ -15,7 +17,9 @@ function App() {
 
   return (
     <div className="app-container">
-      <h1>Codexion Visual Replayer</h1>
+      <header>
+        <h1>Codexion Visual Replayer</h1>
+      </header>
       
       {!metadata ? (
         <div className="upload-section">
@@ -26,12 +30,18 @@ function App() {
           <p>Drag and drop or click to upload a .txt or .log file</p>
         </div>
       ) : (
-        <div className="replayer-content">
+        <main className="replayer-content">
           <PlaybackControls />
-          <div className="hub-wrapper">
-            <CircularHub />
+          <div className="simulation-workspace">
+            <div className="hub-wrapper">
+              <CircularHub />
+            </div>
+            <aside className="side-panel">
+              <HeapViewer />
+              <EventLog />
+            </aside>
           </div>
-        </div>
+        </main>
       )}
     </div>
   );

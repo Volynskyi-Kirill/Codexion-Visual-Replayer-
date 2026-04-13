@@ -22,6 +22,6 @@
 - [x] Add state icons for "Compiling," "Debugging," and "Refactoring."
 
 ## Milestone 5: Advanced Features & Polish 
-- [ ] Implement `HeapViewer` sidebar for real-time dongle queue inspection.
-- [ ] Add "Simulation Events" log sidebar.
-- [ ] Visual polish: Glow effects, color transitions, and responsive scaling.
+- [x] Implement `HeapViewer` sidebar for real-time dongle queue inspection.
+- [x] Add "Simulation Events" log sidebar.
+- [x] Visual polish: Glow effects, color transitions, and responsive scaling.
