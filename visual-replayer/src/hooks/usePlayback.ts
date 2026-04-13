@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useLogStore } from '../store/useLogStore';
 
 export function usePlayback() {
-  const { isPlaying, speed, currentTime, setCurrentTime, maxTime } = useLogStore();
+  const { isPlaying, speed, currentTime, setCurrentTime, maxTime, isStreaming, streamingStartTime } = useLogStore();
   const requestRef = useRef<number>(undefined);
   const lastTimeRef = useRef<number>(undefined);
 
@@ -10,12 +10,18 @@ export function usePlayback() {
     const animate = (time: number) => {
       if (lastTimeRef.current !== undefined && isPlaying) {
         const deltaTime = time - lastTimeRef.current;
-        const newTime = currentTime + deltaTime * speed;
+        const nextTime = currentTime + deltaTime * speed;
         
-        if (newTime >= maxTime) {
-          setCurrentTime(maxTime);
+        let dynamicMax = maxTime;
+        if (isStreaming && streamingStartTime) {
+          const liveElapsed = Date.now() - streamingStartTime;
+          dynamicMax = Math.max(maxTime, liveElapsed);
+        }
+
+        if (nextTime >= dynamicMax) {
+          setCurrentTime(dynamicMax, dynamicMax);
         } else {
-          setCurrentTime(newTime);
+          setCurrentTime(nextTime, dynamicMax);
         }
       }
       lastTimeRef.current = time;

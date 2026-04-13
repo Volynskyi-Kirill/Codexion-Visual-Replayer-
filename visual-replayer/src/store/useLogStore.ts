@@ -16,13 +16,14 @@ interface LogStore {
     maxTime: number;
     isLoading: boolean;
     isStreaming: boolean;
+    streamingStartTime: number | null;
     error: string | null;
     isPlaying: boolean;
     speed: number;
 
     setLogs: (content: string) => void;
     startSimulation: (config: SimulationConfig) => Promise<void>;
-    setCurrentTime: (ts: number) => void;
+    setCurrentTime: (ts: number, dynamicMaxTime?: number) => void;
     setIsPlaying: (playing: boolean) => void;
     setSpeed: (speed: number) => void;
     goToNextEvent: () => void;
@@ -38,6 +39,7 @@ export const useLogStore = create<LogStore>((set) => ({
     maxTime: 0,
     isLoading: false,
     isStreaming: false,
+    streamingStartTime: null,
     error: null,
     isPlaying: false,
     speed: 1,
@@ -66,6 +68,7 @@ export const useLogStore = create<LogStore>((set) => ({
         set({
             isLoading: true,
             isStreaming: true,
+            streamingStartTime: null,
             error: null,
             events: [],
             metadata: null,
@@ -97,6 +100,7 @@ export const useLogStore = create<LogStore>((set) => ({
                         metadata: parsed,
                         isLoading: false,
                         isPlaying: true,
+                        streamingStartTime: Date.now(),
                     });
                 } else {
                     set((state) => {
@@ -106,8 +110,6 @@ export const useLogStore = create<LogStore>((set) => ({
                         ];
                         const newMaxTime = Math.max(state.maxTime, parsed.ts);
 
-                        // If the user is currently at the "end" of the timeline,
-                        // automatically advance to keep up with the live stream
                         const shouldFollow =
                             state.currentTime === state.maxTime;
 
@@ -130,28 +132,36 @@ export const useLogStore = create<LogStore>((set) => ({
                     error: ERROR_MESSAGES.FETCH_FAILED,
                     isLoading: false,
                     isStreaming: false,
+                    streamingStartTime: null,
                 });
             };
 
             socket.onclose = () => {
-                set({ isStreaming: false, isPlaying: false });
+                set({
+                    isStreaming: false,
+                    isPlaying: false,
+                    streamingStartTime: null,
+                });
             };
         } catch (e) {
             set({
                 error: ERROR_MESSAGES.FETCH_FAILED,
                 isLoading: false,
                 isStreaming: false,
+                streamingStartTime: null,
             });
         }
     },
 
-    setCurrentTime: (ts: number) => {
+    setCurrentTime: (ts: number, dynamicMaxTime?: number) => {
         set((state) => {
-            const clampedTs = Math.max(0, Math.min(ts, state.maxTime));
+            const currentMax =
+                dynamicMaxTime !== undefined
+                    ? Math.max(state.maxTime, dynamicMaxTime)
+                    : state.maxTime;
+            const clampedTs = Math.max(0, Math.min(ts, currentMax));
             let newIndex = -1;
 
-            // Fix: Only apply events if time is strictly greater than 0.
-            // This allows starting from a clean initial state at 0ms.
             if (clampedTs > 0) {
                 for (let i = 0; i < state.events.length; i++) {
                     if (state.events[i].ts <= clampedTs) {
@@ -162,11 +172,10 @@ export const useLogStore = create<LogStore>((set) => ({
                 }
             }
 
-            // During streaming, we don't want to stop playing just because we hit the current maxTime,
-            // as more events are expected to arrive.
-            const shouldStop = !state.isStreaming && clampedTs >= state.maxTime;
+            const shouldStop = !state.isStreaming && clampedTs >= currentMax;
 
             return {
+                maxTime: currentMax,
                 currentTime: clampedTs,
                 currentEventIndex: newIndex,
                 isPlaying: shouldStop ? false : state.isPlaying,
@@ -218,6 +227,7 @@ export const useLogStore = create<LogStore>((set) => ({
             error: null,
             isPlaying: false,
             speed: 1,
+            streamingStartTime: null,
         });
     },
 }));
