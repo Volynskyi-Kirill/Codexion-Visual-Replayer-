@@ -3,15 +3,15 @@ import { useLogStore } from '../store/useLogStore';
 import { COLORS } from '../utils/constants';
 
 export const EventLog: React.FC = () => {
-  const { events, currentTime } = useLogStore();
+  const { events, currentEventIndex } = useLogStore();
 
   const filteredEvents = useMemo(() => {
-    // Show last 50 events up to currentTime
+    // Show events up to currentEventIndex
     return events
-      .filter(e => e.ts <= currentTime)
+      .slice(0, currentEventIndex + 1)
       .slice(-50)
       .reverse();
-  }, [events, currentTime]);
+  }, [events, currentEventIndex]);
 
   return (
     <div className="side-panel-section log-section">

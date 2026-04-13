@@ -11,7 +11,8 @@ import { SIMULATION_DEFAULTS } from '../constants';
 export function generateSnapshot(
   metadata: InitializeEvent,
   events: TimedEvent[],
-  targetTs: number
+  eventIndex: number,
+  currentTime: number
 ): SimulationSnapshot {
   const coders = new Map<number, CoderState>();
   const dongles = new Map<number, DongleState>();
@@ -40,9 +41,9 @@ export function generateSnapshot(
     });
   }
 
-  // Process events up to targetTs
-  for (const event of events) {
-    if (event.ts > targetTs) break;
+  // Process events up to eventIndex (inclusive)
+  for (let i = 0; i <= eventIndex && i < events.length; i++) {
+    const event = events[i];
 
     switch (event.status) {
       case SimulationStatus.REQUEST_DONGLE: {
@@ -105,7 +106,7 @@ export function generateSnapshot(
   }
 
   return {
-    ts: targetTs,
+    ts: currentTime,
     coders,
     dongles,
     isBurnedOut,

@@ -8,12 +8,12 @@ import { HUB_SIZE, CENTER, COLORS, CODER_RADIUS, DONGLE_RADIUS } from '../utils/
 import { polarToCartesian, getCoderAngle, getDongleAngle } from '../utils/geometry';
 
 export const CircularHub: React.FC = () => {
-  const { metadata, events, currentTime } = useLogStore();
+  const { metadata, events, currentTime, currentEventIndex } = useLogStore();
 
   const snapshot = useMemo(() => {
     if (!metadata) return null;
-    return generateSnapshot(metadata, events, currentTime);
-  }, [metadata, events, currentTime]);
+    return generateSnapshot(metadata, events, currentEventIndex, currentTime);
+  }, [metadata, events, currentEventIndex, currentTime]);
 
   if (!metadata || !snapshot) {
     return null;

@@ -3,12 +3,12 @@ import { useLogStore } from '../store/useLogStore';
 import { generateSnapshot } from '../utils/snapshot';
 
 export const HeapViewer: React.FC = () => {
-  const { metadata, events, currentTime } = useLogStore();
+  const { metadata, events, currentTime, currentEventIndex } = useLogStore();
 
   const snapshot = useMemo(() => {
     if (!metadata) return null;
-    return generateSnapshot(metadata, events, currentTime);
-  }, [metadata, events, currentTime]);
+    return generateSnapshot(metadata, events, currentEventIndex, currentTime);
+  }, [metadata, events, currentEventIndex, currentTime]);
 
   if (!snapshot) return null;
 

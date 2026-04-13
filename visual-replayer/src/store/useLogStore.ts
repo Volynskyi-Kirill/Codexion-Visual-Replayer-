@@ -7,6 +7,7 @@ interface LogStore {
   metadata: InitializeEvent | null;
   events: TimedEvent[];
   currentTime: number;
+  currentEventIndex: number;
   maxTime: number;
   isLoading: boolean;
   error: string | null;
@@ -26,6 +27,7 @@ export const useLogStore = create<LogStore>((set) => ({
   metadata: null,
   events: [],
   currentTime: 0,
+  currentEventIndex: -1,
   maxTime: 0,
   isLoading: false,
   error: null,
@@ -36,7 +38,15 @@ export const useLogStore = create<LogStore>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const { metadata, events, maxTime } = parseLogs(content);
-      set({ metadata, events, maxTime, currentTime: 0, isLoading: false, isPlaying: false });
+      set({ 
+        metadata, 
+        events, 
+        maxTime, 
+        currentTime: 0, 
+        currentEventIndex: -1,
+        isLoading: false, 
+        isPlaying: false 
+      });
     } catch (e: unknown) {
       const message = e instanceof Error ? e.message : ERROR_MESSAGES.PARSING_FAILED;
       set({ error: message, isLoading: false });
@@ -44,10 +54,22 @@ export const useLogStore = create<LogStore>((set) => ({
   },
 
   setCurrentTime: (ts: number) => {
-    set((state) => ({
-      currentTime: Math.max(0, Math.min(ts, state.maxTime)),
-      isPlaying: ts >= state.maxTime ? false : state.isPlaying,
-    }));
+    set((state) => {
+      const clampedTs = Math.max(0, Math.min(ts, state.maxTime));
+      let newIndex = -1;
+      for (let i = 0; i < state.events.length; i++) {
+        if (state.events[i].ts <= clampedTs) {
+          newIndex = i;
+        } else {
+          break;
+        }
+      }
+      return {
+        currentTime: clampedTs,
+        currentEventIndex: newIndex,
+        isPlaying: clampedTs >= state.maxTime ? false : state.isPlaying,
+      };
+    });
   },
 
   setIsPlaying: (playing: boolean) => set({ isPlaying: playing }),
@@ -55,21 +77,31 @@ export const useLogStore = create<LogStore>((set) => ({
 
   goToNextEvent: () => {
     set((state) => {
-      const nextEvent = state.events.find(e => e.ts > state.currentTime);
-      if (nextEvent) {
-        return { currentTime: nextEvent.ts };
+      const nextIndex = state.currentEventIndex + 1;
+      if (nextIndex < state.events.length) {
+        return { 
+          currentEventIndex: nextIndex,
+          currentTime: state.events[nextIndex].ts
+        };
       }
-      return { currentTime: state.maxTime };
+      return { 
+        currentTime: state.maxTime,
+        currentEventIndex: state.events.length - 1
+      };
     });
   },
 
   goToPrevEvent: () => {
     set((state) => {
-      const prevEvent = state.events.slice().reverse().find(e => e.ts < state.currentTime);
-      if (prevEvent) {
-        return { currentTime: prevEvent.ts };
+      const prevIndex = state.currentEventIndex - 1;
+      if (prevIndex >= -1) {
+        const prevTs = prevIndex >= 0 ? state.events[prevIndex].ts : 0;
+        return { 
+          currentEventIndex: prevIndex,
+          currentTime: prevTs
+        };
       }
-      return { currentTime: 0 };
+      return { currentTime: 0, currentEventIndex: -1 };
     });
   },
 
@@ -78,6 +110,7 @@ export const useLogStore = create<LogStore>((set) => ({
       metadata: null,
       events: [],
       currentTime: 0,
+      currentEventIndex: -1,
       maxTime: 0,
       isLoading: false,
       error: null,
