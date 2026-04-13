@@ -16,6 +16,7 @@ export const DongleNode: React.FC<DongleNodeProps> = ({
     const angle = getDongleAngle(dongle.id, totalDongles);
     const { x, y } = polarToCartesian(angle, DONGLE_RADIUS);
     const isActive = dongle.current_owner_id !== null;
+    const stateTransition = { duration: 0.25, ease: 'easeOut' as const };
 
     return (
         <motion.g
@@ -24,11 +25,17 @@ export const DongleNode: React.FC<DongleNodeProps> = ({
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         >
             {/* Background circle */}
-            <circle
+            <motion.circle
                 r={DONGLE_SIZE / 2}
                 fill='#1e293b'
                 stroke={isActive ? COLORS.DONGLE_ACTIVE : COLORS.DONGLE_IDLE}
                 strokeWidth='2'
+                animate={{
+                    stroke: isActive
+                        ? COLORS.DONGLE_ACTIVE
+                        : COLORS.DONGLE_IDLE,
+                }}
+                transition={stateTransition}
             />
 
             {/* USB Icon */}
@@ -55,8 +62,12 @@ export const DongleNode: React.FC<DongleNodeProps> = ({
 
             {/* Queue size indicator */}
             {dongle.queue.length > 0 && (
-                <g
+                <motion.g
                     transform={`translate(${DONGLE_SIZE / 2}, -${DONGLE_SIZE / 2})`}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.8 }}
+                    transition={stateTransition}
                 >
                     <circle r='10' fill={COLORS.WAITING} />
                     <text
@@ -68,7 +79,7 @@ export const DongleNode: React.FC<DongleNodeProps> = ({
                     >
                         {dongle.queue.length}
                     </text>
-                </g>
+                </motion.g>
             )}
 
             {/* ID Label */}

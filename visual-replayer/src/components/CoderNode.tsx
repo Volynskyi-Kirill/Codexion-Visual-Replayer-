@@ -69,6 +69,7 @@ export const CoderNode: React.FC<CoderNodeProps> = ({
     const progress = timeLeft / timeToBurnout;
     const strokeDasharray = 2 * Math.PI * (NODE_SIZE / 2 + 5);
     const strokeDashoffset = strokeDasharray * (1 - progress);
+    const stateTransition = { duration: 0.25, ease: 'easeOut' as const };
 
     return (
         <motion.g
@@ -77,11 +78,12 @@ export const CoderNode: React.FC<CoderNodeProps> = ({
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         >
             {/* Burnout Radial Bar */}
-            <circle
+            <motion.circle
                 r={NODE_SIZE / 2 + 5}
                 fill='none'
                 stroke={COLORS.LINE}
                 strokeWidth='4'
+                transition={stateTransition}
             />
             <motion.circle
                 r={NODE_SIZE / 2 + 5}
@@ -95,14 +97,17 @@ export const CoderNode: React.FC<CoderNodeProps> = ({
                 strokeDasharray={strokeDasharray}
                 animate={{ strokeDashoffset }}
                 style={{ rotate: -90, transformOrigin: 'center' }}
+                transition={stateTransition}
             />
 
             {/* Coder Background */}
-            <circle
+            <motion.circle
                 r={NODE_SIZE / 2}
                 fill='#1e293b'
                 stroke={getStatusColor(coder.status)}
                 strokeWidth='3'
+                animate={{ stroke: getStatusColor(coder.status) }}
+                transition={stateTransition}
             />
 
             {/* Icon */}

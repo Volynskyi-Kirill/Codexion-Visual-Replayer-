@@ -36,6 +36,7 @@ export const CircularHub: React.FC = () => {
 
     const codersArray = Array.from(snapshot.coders.values());
     const donglesArray = Array.from(snapshot.dongles.values());
+    const lineTransition = { duration: 0.22, ease: 'easeOut' as const };
 
     return (
         <div
@@ -118,6 +119,7 @@ export const CircularHub: React.FC = () => {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 0.6 }}
                                     exit={{ opacity: 0 }}
+                                    transition={lineTransition}
                                 />
                             );
                         });
@@ -165,6 +167,7 @@ export const CircularHub: React.FC = () => {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 0.55 }}
                                     exit={{ opacity: 0 }}
+                                    transition={lineTransition}
                                 />
                             );
                         });
