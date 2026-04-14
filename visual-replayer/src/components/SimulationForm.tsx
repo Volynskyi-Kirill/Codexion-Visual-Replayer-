@@ -1,12 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLogStore } from '../store/useLogStore';
-import { SIMULATION_FORM_DEFAULTS } from '../constants';
+import {
+    SIMULATION_FORM_DEFAULTS,
+    SIMULATION_FORM_STORAGE_KEY,
+} from '../constants';
 import { SimulationConfigSchema } from '../utils/schemas';
 import type { SimulationConfig } from '../utils/types';
 
 type FormData = Omit<SimulationConfig, 'number_of_dongles'>;
+
+const SimulationFormStorageSchema = SimulationConfigSchema.omit({ number_of_dongles: true });
+
+const getStoredFormValues = (): FormData => {
+    if (typeof window === 'undefined') {
+        return SIMULATION_FORM_DEFAULTS;
+    }
+
+    const rawValue = window.localStorage.getItem(SIMULATION_FORM_STORAGE_KEY);
+
+    if (!rawValue) {
+        return SIMULATION_FORM_DEFAULTS;
+    }
+
+    try {
+        return SimulationFormStorageSchema.parse(JSON.parse(rawValue));
+    } catch {
+        return SIMULATION_FORM_DEFAULTS;
+    }
+};
 
 export const SimulationForm: React.FC = () => {
     const { startSimulation, isLoading, error } = useLogStore();
@@ -14,11 +37,29 @@ export const SimulationForm: React.FC = () => {
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors },
     } = useForm<FormData>({
         resolver: zodResolver(SimulationConfigSchema.omit({ number_of_dongles: true })),
-        defaultValues: SIMULATION_FORM_DEFAULTS,
+        defaultValues: getStoredFormValues(),
     });
+
+    const watchedValues = watch();
+
+    useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+
+        if (!SimulationFormStorageSchema.safeParse(watchedValues).success) {
+            return;
+        }
+
+        window.localStorage.setItem(
+            SIMULATION_FORM_STORAGE_KEY,
+            JSON.stringify(watchedValues),
+        );
+    }, [watchedValues]);
 
     const onSubmit = async (data: FormData) => {
         const fullConfig: SimulationConfig = {

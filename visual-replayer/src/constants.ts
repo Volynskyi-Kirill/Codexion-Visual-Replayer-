@@ -6,6 +6,7 @@ export const APP_TITLE = 'Codexion Visual Replayer';
 export const UPLOAD_PROMPT = 'Upload a log file to get started.';
 
 export const WS_SIMULATION_PATH = '/api/ws/simulate';
+export const SIMULATION_FORM_STORAGE_KEY = 'codexion.simulation-form';
 
 export const SIMULATION_FORM_DEFAULTS = {
   number_of_coders: 5,
