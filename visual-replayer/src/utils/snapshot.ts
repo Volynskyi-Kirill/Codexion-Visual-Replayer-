@@ -7,6 +7,19 @@ import type {
     DongleState,
 } from './types';
 import { SIMULATION_DEFAULTS } from '../constants';
+import { COLORS } from './constants';
+
+export const getCenterHubStrokeColor = (snapshot: SimulationSnapshot) => {
+    if (snapshot.isBurnedOut) return COLORS.BURNOUT;
+    if (snapshot.isSuccess) return COLORS.SUCCESS;
+    return COLORS.DEBUGGING;
+};
+
+export const getCenterHubLabel = (snapshot: SimulationSnapshot) => {
+    if (snapshot.isBurnedOut) return 'BURNED OUT';
+    if (snapshot.isSuccess) return 'SUCCESS';
+    return 'COMPILER';
+};
 
 export function generateSnapshot(
     metadata: InitializeEvent,

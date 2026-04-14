@@ -16,6 +16,7 @@ import {
     getCoderAngle,
     getDongleAngle,
 } from '../utils/geometry';
+import { getCenterHubLabel, getCenterHubStrokeColor } from '../utils/snapshot';
 
 export const CircularHub: React.FC = () => {
     const { metadata, events, currentTime, currentEventIndex } = useLogStore();
@@ -62,9 +63,7 @@ export const CircularHub: React.FC = () => {
                     cy={CENTER}
                     r={50}
                     fill='url(#centerGradient)'
-                    stroke={
-                        snapshot.isBurnedOut ? COLORS.BURNOUT : COLORS.DEBUGGING
-                    }
+                    stroke={getCenterHubStrokeColor(snapshot)}
                     strokeWidth='4'
                 />
                 <defs>
@@ -81,7 +80,7 @@ export const CircularHub: React.FC = () => {
                     fontSize='10'
                     fontWeight='bold'
                 >
-                    {snapshot.isBurnedOut ? 'BURNED OUT' : 'COMPILER'}
+                    {getCenterHubLabel(snapshot)}
                 </text>
 
                 {/* Ownership Lines */}

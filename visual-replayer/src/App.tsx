@@ -18,10 +18,25 @@ function App() {
         <div className='app-container'>
             <header>
                 <div className='header-left'>
-                    <h1>Codexion Visual Replayer</h1>
+                    {metadata ? (
+                        <button
+                            type='button'
+                            className='title-btn'
+                            onClick={reset}
+                            title='Start a new simulation'
+                        >
+                            <h1>Codexion Visual Replayer</h1>
+                        </button>
+                    ) : (
+                        <h1>Codexion Visual Replayer</h1>
+                    )}
                 </div>
                 <div className='header-right'>
-                    <button className='icon-btn' onClick={() => setIsFAQOpen(true)} title='Help & FAQ'>
+                    <button
+                        className='icon-btn'
+                        onClick={() => setIsFAQOpen(true)}
+                        title='Help & FAQ'
+                    >
                         <HelpCircle size={20} />
                     </button>
                     {metadata && (

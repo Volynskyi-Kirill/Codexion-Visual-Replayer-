@@ -12,6 +12,7 @@ export const COLORS = {
     DEBUGGING: '#3b82f6',
     REFACTORING: '#a855f7',
     BURNOUT: '#ef4444',
+    SUCCESS: '#22c55e',
     DONGLE_IDLE: '#64748b',
     DONGLE_ACTIVE: '#10b981',
     LINE: '#334155',
