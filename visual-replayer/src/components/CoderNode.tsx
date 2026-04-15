@@ -65,10 +65,7 @@ export const CoderNode: React.FC<CoderNodeProps> = ({
     const isBurnedOut = coder.status === 'BURNOUT';
     const timeLeft = isBurnedOut
         ? 0
-        : Math.max(
-              0,
-              timeToBurnout - (currentTime - coder.last_state_change_ts),
-          );
+        : Math.max(0, coder.deadline - currentTime);
     const progress = timeLeft / timeToBurnout;
     const strokeDasharray = 2 * Math.PI * (NODE_SIZE / 2 + 5);
     const strokeDashoffset = strokeDasharray * (1 - progress);

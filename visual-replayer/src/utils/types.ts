@@ -104,6 +104,7 @@ export interface CoderState {
     current_dongle_ids: number[];
     compiles_done: number;
     last_state_change_ts: number;
+    last_compile_ts: number;
 }
 
 export interface DongleState {
@@ -112,6 +113,7 @@ export interface DongleState {
     queue: number[];
     priorities: number[];
     cooldown_until: number;
+    last_release_ts: number;
 }
 
 export interface SimulationSnapshot {
